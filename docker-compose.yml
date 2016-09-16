@@ -1,0 +1,63 @@
+version: '2'
+
+services:
+        workspace:
+                build:
+                        context: ./workspace
+                volumes_from:
+                        - volumes_source
+                extra_hosts:
+                        - "dockerhost:172.17.0.1"
+                tty: true
+
+        php-fpm:
+                build:
+                        context: ./php-fpm
+                volumes_from:
+                        - volumes_source
+                expose:
+                        - "9000"
+                links:
+                        - workspace
+                extra_hosts:
+                        - "dockerhost:172.17.0.1"
+                environment:
+                        - PHP_IDE_CONFIG="serverName=app"
+
+        nginx:
+                build:
+                        context: ./nginx
+                        args:
+                                - PHP_UPSTREAM=php-fpm
+                volumes_from:
+                        - volumes_source
+                volumes:
+                        - ./logs/nginx/:/var/log/nginx
+                ports:
+                        - "80:80"
+                        - "443:443"
+                links:
+                        - php-fpm
+
+        mysql:
+                build: ./mysql
+                volumes_from:
+                        - volumes_data
+                ports:
+                        - "3306:3306"
+                environment:
+                        MYSQL_DATABASE: app
+                        MYSQL_USER: app_user
+                        MYSQL_PASSWORD: app_password
+                        MYSQL_ROOT_PASSWORD: root
+
+        volumes_source:
+                image: tianon/true
+                volumes:
+                        - ../:/var/www/app
+
+        volumes_data:
+                image: tianon/true
+                volumes:
+                        - ./data/mysql:/var/lib/mysql
+
