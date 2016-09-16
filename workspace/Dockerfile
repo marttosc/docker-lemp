@@ -58,13 +58,6 @@ RUN chown -R lemp_user:lemp_user /home/lemp_user/
 
 USER lemp_user
 
-ARG COMPOSER_GLOBAL_INSTALL=true
-ENV COMPOSER_GLOBAL_INSTALL ${COMPOSER_GLOBAL_INSTALL}
-RUN if [ ${COMPOSER_GLOBAL_INSTALL} = true ]; then \
-    # run the install
-    composer global install \
-;fi
-
 USER root
 RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
