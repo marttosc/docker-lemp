@@ -12,7 +12,8 @@ ENV LC_CTYPE=UTF-8
 ENV LANG=pt_BR.UTF-8
 ENV TERM xterm
 
-RUN apt-get install install -y software-properties-common && \
+RUN apt-get update && \
+	apt-get install -y software-properties-common && \
 	apt-get install -y --force-yes \
 		php7.0-cli \
 	        php7.0-common \
