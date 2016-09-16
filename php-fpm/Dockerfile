@@ -17,7 +17,7 @@ RUN docker-php-ext-install mcrypt
 
 RUN docker-php-ext-install pdo_mysql
 
-RUN docker-php-ext-install xml
+RUN docker-php-ext-install mbstring
 
 ADD ./custom.ini /usr/local/etc/php/conf.d
 ADD ./custom.pool.conf /usr/local/etc/php-fpm.d/
